@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EraAuto — Территория кузовного ремонта</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <circle cx="12" cy="11" r="3"/>
+          </svg>
+          Москва, ул. Примерная, 12
+        </span>
+        <span>Пн–Пт 9:00–18:00, Сб 10:00–16:00</span>
+      </div>
+      <div class="topbar-right">
+        <a href="#">О компании</a>
+        <a href="#">Доставка</a>
+        <a href="#">Контакты</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-main">
+
+      <!-- LOGO -->
+      <a href="#" class="logo">
+        <span class="logo-name">ERAAUTO</span>
+        <span class="logo-tagline">Территория кузовного ремонта</span>
+      </a>
+
+      <!-- SEARCH -->
+      <div class="search-wrap">
+        <input type="text" placeholder="Поиск по каталогу товаров...">
+        <button class="search-btn">
+          <svg viewBox="0 0 24 24" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- CONTACTS -->
+      <div class="contacts">
+        <a href="tel:+74951434384"><span class="icon">📞</span>+7 (495) 143-43-84</a>
+        <a href="tel:+79013384384"><span class="icon">📱</span>+7 (901) 338-43-84</a>
+        <a href="https://wa.me/79771053011"><span class="icon">💬</span>+7 (977) 105-30-11</a>
+      </div>
+
+      <!-- CTA -->
+      <button class="cta-btn">Заказать звонок</button>
+
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <!-- CATALOG BTN -->
+      <button class="catalog-btn" id="catalogBtn">
+        <span class="bars">
+          <span></span><span></span><span></span>
+        </span>
+        Каталог
+      </button>
+
+      <!-- DROPDOWN -->
+      <div class="catalog-dropdown" id="catalogDropdown">
+        <ul>
+          {% for category in categories %}
+            <li><a href="/catalog/{{ category.slug }}/">{{ category.name }}</a></li>
+          {% empty %}
+            <li class="empty">Категории не найдены</li>
+          {% endfor %}
+        </ul>
+        <div class="catalog-dropdown-footer">
+          <a href="/catalog/">Весь каталог →</a>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#">Галерея</a></li>
+        <li><a href="#">Доставка</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+
+      <button class="cart-btn">
+        <svg viewBox="0 0 24 24" stroke-width="1.8">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Корзина
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Профессиональное оборудование</div>
+      <h1>Кузовной<br>ремонт без<br><em>компромиссов</em></h1>
+      <p>Автостапели, стенды, оборудование для кузовного ремонта от ведущих производителей. Гарантия качества и сервисное обслуживание.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Смотреть каталог</button>
+        <button class="btn-secondary">Получить консультацию</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-slider-wrap">
+        <div class="hero-slider" id="heroSlider">
+          <div class="hero-slide active">
+            <img src="{% static 'images/MainImage.png' %}" alt="Автостапель">
+          </div>
+          <div class="hero-slide">
+            <img src="{% static 'images/MainImage2.png' %}" alt="Автостапель2">
+          </div>
+          <div class="hero-slide">
+            <img src="{% static 'images/MainImage3.png' %}" alt="Автостапель3">
+          </div>
+          <div class="hero-slide">
+            <img src="{% static 'images/MainImage4.png' %}" alt="Автостапель4">
+          </div>
+          <div class="hero-slide">
+            <img src="{% static 'images/MainImage5.png' %}" alt="Автостапель5">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATES -->
+  <section class="certs">
+    <div class="certs-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">Документы</div>
+        <h2 class="section-title">Сертификаты соответствия</h2>
+        <p class="section-sub">Наша продукция сертифицирована по стандартам Евразийского экономического союза</p>
+      </div>
+      <div class="certs-grid">
+
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <iframe src="{% static 'images/sertificates/serf1.pdf' %}#toolbar=0&navpanes=0&scrollbar=0" class="cert-pdf"></iframe>
+            <div class="cert-overlay">
+              <a href="{% static 'images/sertificates/serf1.pdf' %}" target="_blank" class="cert-view-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                Открыть PDF
+              </a>
+            </div>
+          </div>
+          <div class="cert-info">
+            <div class="cert-badge">EAC</div>
+            <div class="cert-details">
+              <div class="cert-num">№ ЕАЭС KG 417/032.CN.02.01431</div>
+              <div class="cert-desc">Стапели для кузовного ремонта BAIWO</div>
+              <div class="cert-valid">Действует до 04.12.2030</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-img-wrap">
+            <iframe src="{% static 'images/sertificates/serf2.pdf' %}#toolbar=0&navpanes=0&scrollbar=0" class="cert-pdf"></iframe>
+            <div class="cert-overlay">
+              <a href="{% static 'images/sertificates/serf2.pdf' %}" target="_blank" class="cert-view-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                Открыть PDF
+              </a>
+            </div>
+          </div>
+          <div class="cert-info">
+            <div class="cert-badge">EAC</div>
+            <div class="cert-details">
+              <div class="cert-num">№ ЕАЭС KG 417/032.CN.02.01753</div>
+              <div class="cert-desc">Подъёмники автомобильные ЭРА АВТО</div>
+              <div class="cert-valid">Действует до 25.12.2030</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="about-bg">
+      <img src="{% static 'images/garage.jpg' %}" alt="Мастерская ЭРА АВТО">
+      <div class="about-bg-overlay"></div>
+    </div>
+    <div class="about-inner">
+      <div class="about-left">
+        <div class="section-eyebrow">О компании</div>
+        <h2 class="about-title">ЭРА АВТО — надёжный партнёр<br>в кузовном ремонте</h2>
+        <p class="about-text">Изготовление и продажа оборудования для ремонта кузова аварийных автомобилей — основное направление деятельности нашей компании. Мы реализуем профессиональные инструменты и аксессуары для правки кузова от ведущих мировых производителей, а также высокоэффективное оснащение для автосервисов.</p>
+        <p class="about-text">Наш каталог включает автостапели торговых марок BAIWO, подъёмники ЭРА АВТО, споттеры и сопутствующее оборудование. Вся продукция сертифицирована и соответствует требованиям технических регламентов ТС 010/2011.</p>
+        <ul class="about-list">
+          <li><span class="about-list-dot"></span>Официальные сертификаты соответствия ЕАС</li>
+          <li><span class="about-list-dot"></span>Гарантийное и постгарантийное обслуживание</li>
+          <li><span class="about-list-dot"></span>Доставка по всей России в течение 48 часов</li>
+          <li><span class="about-list-dot"></span>Консультация специалиста перед покупкой</li>
+        </ul>
+        <div class="about-actions">
+          <button class="btn-primary">Смотреть каталог</button>
+          <button class="btn-secondary">Связаться с нами</button>
+        </div>
+      </div>
+      <div class="about-right">
+        <div class="about-grid">
+          <div class="about-stat-card">
+            <div class="about-stat-num">15+</div>
+            <div class="about-stat-label">Лет на рынке</div>
+          </div>
+          <div class="about-stat-card">
+            <div class="about-stat-num">2400+</div>
+            <div class="about-stat-label">Товаров в каталоге</div>
+          </div>
+          <div class="about-stat-card">
+            <div class="about-stat-num">8700+</div>
+            <div class="about-stat-label">Довольных клиентов</div>
+          </div>
+          <div class="about-stat-card">
+            <div class="about-stat-num">48ч</div>
+            <div class="about-stat-label">Среднее время доставки</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Лет на рынке</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2400+</div>
+      <div class="stat-label">Товаров в каталоге</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8700+</div>
+      <div class="stat-label">Довольных клиентов</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">48ч</div>
+      <div class="stat-label">Среднее время доставки</div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
