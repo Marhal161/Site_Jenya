@@ -1,0 +1,118 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}База знаний — документы{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">База знаний <span class="ap-muted">(документы)</span></h1>
+  <a href="{% url 'admin_docs_upload' %}" class="ap-btn ap-btn--primary">+ Загрузить документ</a>
+</div>
+
+{% if products %}
+  {% for product in products %}
+    {% if product.documents.all %}
+    <div class="ap-card ap-docs-product-card">
+      <div class="ap-docs-product-header">
+        <div class="ap-docs-product-name">{{ product.name }}</div>
+        <div class="ap-docs-product-cat">{{ product.category.name }}</div>
+      </div>
+      <table class="ap-table">
+        <thead>
+          <tr>
+            <th>Документ</th>
+            <th>Тип</th>
+            <th>Файл</th>
+            <th>Дата</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for doc in product.documents.all %}
+          <tr>
+            <td>{{ doc.title }}</td>
+            <td><span class="ap-badge ap-badge--{{ doc.doc_type }}">{{ doc.get_doc_type_display }}</span></td>
+            <td>
+              <a href="{{ doc.file.url }}" target="_blank" class="ap-docs-file-link">
+                <span class="ap-ext ap-ext--{{ doc.extension }}">{{ doc.extension|upper }}</span>
+                {{ doc.filename }}
+              </a>
+            </td>
+            <td class="ap-muted">{{ doc.created_at|date:"d.m.Y" }}</td>
+            <td class="ap-table-actions">
+              <a href="{% url 'admin_docs_edit' doc.pk %}" class="ap-btn ap-btn--sm">Изменить</a>
+              <form method="post" action="{% url 'admin_docs_delete' doc.pk %}" onsubmit="return confirm('Удалить документ?')">
+                {% csrf_token %}
+                <button class="ap-btn ap-btn--sm ap-btn--danger">Удалить</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  {% endfor %}
+{% else %}
+<div class="ap-card">
+  <div class="ap-empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    <p>Документов пока нет</p>
+    <a href="{% url 'admin_docs_upload' %}" class="ap-btn ap-btn--primary">Загрузить первый документ</a>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.ap-docs-product-card { margin-bottom: 24px; }
+.ap-docs-product-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.ap-docs-product-name { font-weight: 700; font-size: 15px; color: #c10010; }
+.ap-docs-product-cat  { font-size: 12px; color: #888; }
+.ap-docs-file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #c10010;
+  text-decoration: none;
+  font-size: 13px;
+}
+.ap-docs-file-link:hover { color: #dc2626; }
+.ap-ext {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  background: #e5e7eb;
+  color: #374151;
+}
+.ap-ext--pdf { background: #fee2e2; color: #dc2626; }
+.ap-ext--docx, .ap-ext--doc { background: #dbeafe; color: #1d4ed8; }
+.ap-ext--xlsx, .ap-ext--xls { background: #dcfce7; color: #16a34a; }
+.ap-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #374151;
+}
+.ap-badge--manual     { background: #ede9fe; color: #7c3aed; }
+.ap-badge--passport   { background: #dbeafe; color: #1d4ed8; }
+.ap-badge--scheme     { background: #fef3c7; color: #d97706; }
+.ap-badge--certificate{ background: #dcfce7; color: #16a34a; }
+.ap-badge--datasheet  { background: #e0f2fe; color: #0369a1; }
+.ap-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ap-table th { padding: 10px 16px; text-align: left; font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid #f0f0f0; }
+.ap-table td { padding: 12px 16px; border-bottom: 1px solid #f9f9f9; vertical-align: middle; }
+.ap-table-actions { display: flex; gap: 6px; }
+</style>
+{% endblock %}

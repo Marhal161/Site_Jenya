@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ product.name }} — EraAuto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/product.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <circle cx="12" cy="11" r="3"/>
+          </svg>
+          Москва, ул. Примерная, 12
+        </span>
+        <span>Пн–Пт 9:00–18:00, Сб 10:00–16:00</span>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'main-page' %}">О компании</a>
+        <a href="#">Доставка</a>
+        <a href="#">Контакты</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-main">
+      <a href="{% url 'main-page' %}" class="logo">
+        <span class="logo-name">ERAAUTO</span>
+        <span class="logo-tagline">Территория кузовного ремонта</span>
+      </a>
+      <div class="search-wrap">
+        <input type="text" placeholder="Поиск по каталогу товаров..." id="searchInput">
+        <button class="search-btn" id="searchBtn">
+          <svg viewBox="0 0 24 24" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
+      <div class="contacts">
+        <a href="tel:+74951434384"><span class="icon">📞</span>+7 (495) 143-43-84</a>
+        <a href="tel:+79013384384"><span class="icon">📱</span>+7 (901) 338-43-84</a>
+        <a href="https://wa.me/79771053011"><span class="icon">💬</span>+7 (977) 105-30-11</a>
+      </div>
+      <button class="cta-btn">Заказать звонок</button>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <button class="catalog-btn" id="catalogBtn">
+        <span class="bars"><span></span><span></span><span></span></span>
+        Каталог
+      </button>
+      <div class="catalog-dropdown" id="catalogDropdown">
+        <ul id="navDropdownList"><li class="empty">Загрузка...</li></ul>
+        <div class="catalog-dropdown-footer">
+          <a href="{% url 'catalog-page' %}">Весь каталог →</a>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Галерея</a></li>
+        <li><a href="#">Доставка</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+      <button class="cart-btn">
+        <svg viewBox="0 0 24 24" stroke-width="1.8">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Корзина
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-wrap">
+    <div class="breadcrumb-inner">
+      <a href="{% url 'main-page' %}">Главная</a>
+      <span class="breadcrumb-sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <a href="{% url 'catalog-page' %}">Каталог</a>
+      <span class="breadcrumb-sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg></span>
+      {% if category %}
+        <a href="{% url 'category-page' category.slug %}">{{ category.name }}</a>
+        <span class="breadcrumb-sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg></span>
+      {% endif %}
+      <span class="breadcrumb-current">{{ product.name }}</span>
+    </div>
+  </div>
+
+  <!-- PRODUCT PAGE -->
+  <main class="product-main">
+    <div class="product-inner" id="productInner">
+      <!-- skeleton пока грузится -->
+      <div class="product-gallery-skeleton"></div>
+      <div class="product-info-skeleton"></div>
+    </div>
+  </main>
+
+  <script>
+    window.PRODUCT_SLUG  = "{{ product.slug }}";
+    window.CATEGORY_SLUG = "{{ category.slug }}";
+  </script>
+  <!-- CART DRAWER — статический HTML, всегда в DOM -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Корзина
+        <span class="cart-drawer-count" id="drawerCount">0</span>
+      </div>
+      <button class="cart-drawer-close" id="cartDrawerClose" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="cart-drawer-body" id="drawerBody">
+      <div class="cart-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="52" height="52">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <p>Корзина пуста</p>
+        <a href="/catalog/" class="cart-empty-link">Перейти в каталог</a>
+      </div>
+    </div>
+    <div class="cart-drawer-footer" id="drawerFooter"></div>
+  </div>
+
+
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/cart.js' %}"></script>
+  <script src="{% static 'js/product.js' %}"></script>
+</body>
+</html>

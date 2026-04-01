@@ -1,0 +1,108 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Галерея{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">Галерея <span class="ap-muted">({{ images|length }})</span></h1>
+  <a href="{% url 'admin_gallery_upload' %}" class="ap-btn ap-btn--primary">+ Загрузить фото</a>
+</div>
+
+{% if images %}
+<div class="ap-card">
+  <div class="ap-gallery-grid">
+    {% for img in images %}
+    <div class="ap-gallery-item">
+      <div class="ap-gallery-img-wrap">
+        <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy">
+      </div>
+      <div class="ap-gallery-item-info">
+        <div class="ap-gallery-item-title">{{ img.title|default:"Без подписи" }}</div>
+        <div class="ap-gallery-item-meta">Порядок: {{ img.order }} · {{ img.created_at|date:"d.m.Y" }}</div>
+      </div>
+      <div class="ap-gallery-item-actions">
+        <a href="{% url 'admin_gallery_edit' img.pk %}" class="ap-btn ap-btn--sm">Изменить</a>
+        <form method="post" action="{% url 'admin_gallery_delete' img.pk %}" onsubmit="return confirm('Удалить фото?')">
+          {% csrf_token %}<button class="ap-btn ap-btn--sm ap-btn--danger">Удалить</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="ap-card">
+  <div class="ap-empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+    <p>Фотографий пока нет</p>
+    <a href="{% url 'admin_gallery_upload' %}" class="ap-btn ap-btn--primary">Загрузить первое фото</a>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.ap-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.ap-gallery-item {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.ap-gallery-item:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+.ap-gallery-img-wrap {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+.ap-gallery-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ap-gallery-item-info {
+  padding: 10px 14px 6px;
+}
+.ap-gallery-item-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ap-gallery-item-meta {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+.ap-gallery-item-actions {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px 14px;
+}
+.ap-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+}
+.ap-empty-state svg {
+  margin-bottom: 16px;
+  opacity: .4;
+}
+.ap-empty-state p {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+</style>
+{% endblock %}

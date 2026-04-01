@@ -1,0 +1,50 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}{{ action }} фото{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">{{ action }} фото</h1>
+  <a href="{% url 'admin_gallery' %}" class="ap-btn">← Назад</a>
+</div>
+<div class="ap-card ap-card--form">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% if obj %}
+    <div class="ap-field">
+      <label>Текущее фото</label>
+      <div style="max-width:300px; border-radius:8px; overflow:hidden; border:1px solid #e5e7eb;">
+        <img src="{{ obj.image.url }}" alt="" style="width:100%; display:block;">
+      </div>
+    </div>
+    <div class="ap-field">
+      <label>Заменить фото</label>
+      <input type="file" name="image" accept="image/*" class="ap-file-input">
+      <span class="ap-hint">Оставьте пустым, чтобы сохранить текущее фото</span>
+    </div>
+    {% else %}
+    <div class="ap-field">
+      <label>Фотографии *</label>
+      <input type="file" name="images" multiple accept="image/*" class="ap-file-input" required>
+      <span class="ap-hint">Можно выбрать несколько файлов</span>
+    </div>
+    {% endif %}
+
+    <div class="ap-field">
+      <label>Подпись</label>
+      <input type="text" name="title" value="{{ obj.title }}" placeholder="Ремонт кузова BMW X5">
+      <span class="ap-hint">Необязательно — будет показываться при наведении</span>
+    </div>
+
+    <div class="ap-field">
+      <label>Порядок сортировки</label>
+      <input type="number" name="order" value="{{ obj.order|default:0 }}" min="0" style="max-width:120px;">
+      <span class="ap-hint">Чем меньше число, тем раньше отображается</span>
+    </div>
+
+    <div class="ap-form-actions">
+      <button type="submit" class="ap-btn ap-btn--primary">Сохранить</button>
+      <a href="{% url 'admin_gallery' %}" class="ap-btn">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

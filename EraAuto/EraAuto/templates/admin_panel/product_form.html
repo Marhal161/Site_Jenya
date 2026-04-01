@@ -1,0 +1,79 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}{{ action }} товар{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">{{ action }} товар</h1>
+  <a href="{% url 'admin_products' %}" class="ap-btn">← Назад</a>
+</div>
+<div class="ap-card ap-card--form">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="ap-form-grid">
+      <div class="ap-field">
+        <label>Название *</label>
+        <input type="text" name="name" value="{{ obj.name }}" required>
+      </div>
+      <div class="ap-field">
+        <label>Slug *</label>
+        <input type="text" name="slug" value="{{ obj.slug }}" required>
+      </div>
+      <div class="ap-field">
+        <label>Категория *</label>
+        <select name="category" required>
+          {% for c in categories %}
+          <option value="{{ c.id }}" {% if obj.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="ap-field">
+        <label>Цена (₽) *</label>
+        <input type="number" name="price" value="{{ obj.price }}" step="0.01" min="0" required>
+      </div>
+    </div>
+
+    <div class="ap-field">
+      <label>Описание</label>
+      <textarea name="description" rows="5">{{ obj.description }}</textarea>
+    </div>
+
+    <div class="ap-field ap-field--check">
+      <label class="ap-check-label">
+        <input type="checkbox" name="in_stock" {% if obj.in_stock or not obj %}checked{% endif %}>
+        В наличии
+      </label>
+    </div>
+
+    {% if images %}
+    <div class="ap-field">
+      <label>Текущие фотографии</label>
+      <div class="ap-images-grid">
+        {% for img in images %}
+        <div class="ap-img-item">
+          <img src="{{ img.image.url }}" alt="">
+          <div class="ap-img-actions">
+            <label class="ap-check-label">
+              <input type="radio" name="main_image" value="{{ img.id }}" {% if img.is_main %}checked{% endif %}> Главное
+            </label>
+            <label class="ap-check-label ap-check-label--danger">
+              <input type="checkbox" name="delete_images" value="{{ img.id }}"> Удалить
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="ap-field">
+      <label>Добавить фотографии</label>
+      <input type="file" name="images" multiple accept="image/*" class="ap-file-input">
+      <span class="ap-hint">Можно выбрать несколько файлов</span>
+    </div>
+
+    <div class="ap-form-actions">
+      <button type="submit" class="ap-btn ap-btn--primary">Сохранить</button>
+      <a href="{% url 'admin_products' %}" class="ap-btn">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

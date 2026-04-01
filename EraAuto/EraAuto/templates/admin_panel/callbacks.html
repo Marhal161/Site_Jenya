@@ -1,0 +1,51 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Заявки{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">Заявки {% if new_count %}<span class="ap-badge ap-badge--red">{{ new_count }} новых</span>{% endif %}</h1>
+</div>
+
+<div class="ap-filters">
+  <form method="get" class="ap-filters-form">
+    <select name="status" onchange="this.form.submit()">
+      <option value="" {% if not status %}selected{% endif %}>Все статусы</option>
+      <option value="new"         {% if status == 'new' %}selected{% endif %}>Новые</option>
+      <option value="in_progress" {% if status == 'in_progress' %}selected{% endif %}>В обработке</option>
+      <option value="done"        {% if status == 'done' %}selected{% endif %}>Завершённые</option>
+    </select>
+  </form>
+</div>
+
+<div class="ap-card">
+  <table class="ap-table">
+    <thead><tr><th>#</th><th>Имя</th><th>Телефон</th><th>Сообщение</th><th>Статус</th><th>Дата</th><th></th></tr></thead>
+    <tbody>
+      {% for cb in callbacks %}
+      <tr>
+        <td class="ap-muted">{{ cb.id }}</td>
+        <td><strong>{{ cb.name }}</strong></td>
+        <td><a href="tel:{{ cb.phone }}" class="ap-link">{{ cb.phone }}</a></td>
+        <td class="ap-muted">{{ cb.message|truncatechars:60|default:"—" }}</td>
+        <td>
+          <form method="post" action="{% url 'admin_callback_status' cb.pk %}">
+            {% csrf_token %}
+            <select name="status" onchange="this.form.submit()" class="ap-select-inline ap-status--{{ cb.status }}">
+              <option value="new"         {% if cb.status == 'new' %}selected{% endif %}>Новая</option>
+              <option value="in_progress" {% if cb.status == 'in_progress' %}selected{% endif %}>В обработке</option>
+              <option value="done"        {% if cb.status == 'done' %}selected{% endif %}>Завершена</option>
+            </select>
+          </form>
+        </td>
+        <td class="ap-muted">{{ cb.created_at|date:"d.m.Y H:i" }}</td>
+        <td class="ap-actions">
+          <form method="post" action="{% url 'admin_callback_delete' cb.pk %}" onsubmit="return confirm('Удалить заявку?')">
+            {% csrf_token %}<button class="ap-btn ap-btn--sm ap-btn--danger">Удалить</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}<tr><td colspan="7" class="ap-muted">Заявок нет</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

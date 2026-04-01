@@ -1,0 +1,26 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}{{ action }} категорию{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">{{ action }} категорию</h1>
+  <a href="{% url 'admin_categories' %}" class="ap-btn">← Назад</a>
+</div>
+<div class="ap-card ap-card--form">
+  <form method="post">
+    {% csrf_token %}
+    <div class="ap-field">
+      <label>Название *</label>
+      <input type="text" name="name" value="{{ obj.name }}" required placeholder="Автостапели">
+    </div>
+    <div class="ap-field">
+      <label>Slug *</label>
+      <input type="text" name="slug" value="{{ obj.slug }}" required placeholder="avtostapeli">
+      <span class="ap-hint">Только латинские буквы, цифры и дефис</span>
+    </div>
+    <div class="ap-form-actions">
+      <button type="submit" class="ap-btn ap-btn--primary">Сохранить</button>
+      <a href="{% url 'admin_categories' %}" class="ap-btn">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

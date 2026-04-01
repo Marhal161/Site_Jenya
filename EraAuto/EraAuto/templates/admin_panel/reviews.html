@@ -1,0 +1,49 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Отзывы{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">Отзывы</h1>
+</div>
+<div class="ap-card">
+  <table class="ap-table">
+    <thead><tr><th>#</th><th>Автор</th><th>Товар</th><th>Оценка</th><th>Текст</th><th>Статус</th><th>Дата</th><th></th></tr></thead>
+    <tbody>
+      {% for r in reviews %}
+      <tr>
+        <td class="ap-muted">{{ r.id }}</td>
+        <td><strong>{{ r.name }}</strong></td>
+        <td><a href="{% url 'admin_product_edit' r.product.pk %}" class="ap-link">{{ r.product.name|truncatechars:30 }}</a></td>
+        <td>
+          <span class="ap-stars">
+            {% for i in "12345" %}{% if forloop.counter <= r.rating %}<span class="ap-star ap-star--on">★</span>{% else %}<span class="ap-star">☆</span>{% endif %}{% endfor %}
+          </span>
+        </td>
+        <td class="ap-muted">{{ r.text|truncatechars:80 }}</td>
+        <td>
+          {% if r.is_approved %}
+            <span class="ap-badge ap-badge--green">Одобрен</span>
+          {% else %}
+            <span class="ap-badge ap-badge--gray">На модерации</span>
+          {% endif %}
+        </td>
+        <td class="ap-muted">{{ r.created_at|date:"d.m.Y" }}</td>
+        <td class="ap-actions">
+          <form method="post" action="{% url 'admin_review_approve' r.pk %}">
+            {% csrf_token %}
+            {% if r.is_approved %}
+              <button class="ap-btn ap-btn--sm">Снять</button>
+            {% else %}
+              <button class="ap-btn ap-btn--sm ap-btn--primary">Одобрить</button>
+            {% endif %}
+          </form>
+          <form method="post" action="{% url 'admin_review_delete' r.pk %}" onsubmit="return confirm('Удалить отзыв?')">
+            {% csrf_token %}<button class="ap-btn ap-btn--sm ap-btn--danger">Удалить</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}<tr><td colspan="8" class="ap-muted">Отзывов нет</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

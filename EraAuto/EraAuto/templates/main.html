@@ -7,6 +7,7 @@
   <title>EraAuto — Территория кузовного ремонта</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 </head>
 <body>
 
@@ -24,9 +25,9 @@
         <span>Пн–Пт 9:00–18:00, Сб 10:00–16:00</span>
       </div>
       <div class="topbar-right">
-        <a href="#">О компании</a>
-        <a href="#">Доставка</a>
-        <a href="#">Контакты</a>
+        <a href="{% url 'main-page' %}#about">О компании</a>
+        <a href="{% url 'main-page' %}#delivery">Доставка</a>
+        <a href="{% url 'main-page' %}#callback">Контакты</a>
       </div>
     </div>
   </div>
@@ -36,15 +37,15 @@
     <div class="header-main">
 
       <!-- LOGO -->
-      <a href="#" class="logo">
+      <a href="{% url 'main-page' %}" class="logo">
         <span class="logo-name">ERAAUTO</span>
         <span class="logo-tagline">Территория кузовного ремонта</span>
       </a>
 
       <!-- SEARCH -->
       <div class="search-wrap">
-        <input type="text" placeholder="Поиск по каталогу товаров...">
-        <button class="search-btn">
+        <input type="text" placeholder="Поиск по каталогу товаров..." id="searchInput">
+        <button class="search-btn" id="searchBtn">
           <svg viewBox="0 0 24 24" stroke-width="2.5">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -60,7 +61,7 @@
       </div>
 
       <!-- CTA -->
-      <button class="cta-btn">Заказать звонок</button>
+      <a href="#callback" class="cta-btn">Заказать звонок</a>
 
     </div>
   </header>
@@ -86,14 +87,15 @@
           {% endfor %}
         </ul>
         <div class="catalog-dropdown-footer">
-          <a href="/catalog/">Весь каталог →</a>
+          <a href="{% url 'catalog-page' %}">Весь каталог →</a>
         </div>
       </div>
 
       <ul class="nav-links">
-        <li><a href="#">Галерея</a></li>
-        <li><a href="#">Доставка</a></li>
-        <li><a href="#">Контакты</a></li>
+        <li><a href="{% url 'gallery-page' %}">Галерея</a></li>
+        <li><a href="{% url 'knowledge-page' %}">База знаний</a></li>
+        <li><a href="#delivery">Доставка</a></li>
+        <li><a href="#callback">Контакты</a></li>
       </ul>
 
       <button class="cart-btn">
@@ -115,8 +117,8 @@
       <h1>Кузовной<br>ремонт без<br><em>компромиссов</em></h1>
       <p>Автостапели, стенды, оборудование для кузовного ремонта от ведущих производителей. Гарантия качества и сервисное обслуживание.</p>
       <div class="hero-actions">
-        <button class="btn-primary">Смотреть каталог</button>
-        <button class="btn-secondary">Получить консультацию</button>
+        <a href="{% url 'catalog-page' %}" class="btn-primary">Смотреть каталог</a>
+        <a href="#callback" class="btn-secondary">Получить консультацию</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -143,7 +145,7 @@
   </section>
 
   <!-- CERTIFICATES -->
-  <section class="certs">
+  <section class="certs" id="certs">
     <div class="certs-inner">
       <div class="section-header">
         <div class="section-eyebrow">Документы</div>
@@ -201,7 +203,7 @@
   </section>
 
   <!-- ABOUT -->
-  <section class="about">
+  <section class="about" id="about">
     <div class="about-bg">
       <img src="{% static 'images/garage.jpg' %}" alt="Мастерская ЭРА АВТО">
       <div class="about-bg-overlay"></div>
@@ -219,8 +221,8 @@
           <li><span class="about-list-dot"></span>Консультация специалиста перед покупкой</li>
         </ul>
         <div class="about-actions">
-          <button class="btn-primary">Смотреть каталог</button>
-          <button class="btn-secondary">Связаться с нами</button>
+          <a href="{% url 'catalog-page' %}" class="btn-primary">Смотреть каталог</a>
+          <a href="#callback" class="btn-secondary">Связаться с нами</a>
         </div>
       </div>
       <div class="about-right">
@@ -247,7 +249,7 @@
   </section>
 
   <!-- STATS -->
-  <div class="stats">
+  <div class="stats" id="delivery">
     <div class="stat">
       <div class="stat-num">15+</div>
       <div class="stat-label">Лет на рынке</div>
@@ -266,6 +268,361 @@
     </div>
   </div>
 
+  <!-- CALLBACK FORM -->
+  <section class="callback" id="callback">
+    <div class="callback-inner">
+
+      <div class="callback-info">
+        <div class="section-eyebrow">Обратная связь</div>
+        <h2 class="callback-title">Остались вопросы?<br>Перезвоним вам</h2>
+        <p class="callback-text">Оставьте заявку — наш специалист свяжется с вами в течение 15 минут и поможет подобрать нужное оборудование.</p>
+        <ul class="callback-features">
+          <li>
+            <div class="callback-feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <span>Ответим в течение 15 минут</span>
+          </li>
+          <li>
+            <div class="callback-feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <span>Бесплатная консультация специалиста</span>
+          </li>
+          <li>
+            <div class="callback-feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13" rx="1"/>
+                <path d="M16 8h4l3 3v5h-7V8z"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+            <span>Доставка по всей России за 48 часов</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="callback-form-wrap">
+        <form class="callback-form" id="callbackForm" novalidate>
+
+          <div class="callback-form-field">
+            <label class="callback-form-label">Ваше имя <span>*</span></label>
+            <input type="text" class="callback-form-input" id="cbName" placeholder="Иван Иванов" maxlength="100">
+          </div>
+
+          <div class="callback-form-field">
+            <label class="callback-form-label">Номер телефона <span>*</span></label>
+            <input type="tel" class="callback-form-input" id="cbPhone" placeholder="+7 (___) ___-__-__" maxlength="20">
+          </div>
+
+          <div class="callback-form-field">
+            <label class="callback-form-label">Сообщение</label>
+            <textarea class="callback-form-input callback-form-textarea" id="cbMessage" placeholder="Расскажите, что вас интересует..." rows="3" maxlength="500"></textarea>
+          </div>
+
+          <div class="callback-form-footer">
+            <div class="callback-form-error" id="cbError"></div>
+            <button type="submit" class="callback-submit-btn" id="cbSubmit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+              Заказать звонок
+            </button>
+          </div>
+
+          <div class="callback-form-note">
+            Нажимая кнопку, вы соглашаетесь с <a href="#">политикой конфиденциальности</a>
+          </div>
+
+        </form>
+
+        <!-- Успех -->
+        <div class="callback-success" id="cbSuccess">
+          <div class="callback-success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h3>Заявка отправлена!</h3>
+          <p>Наш специалист свяжется с вами в течение 15 минут.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="map-section">
+    <div class="map-inner">
+      <div class="map-info">
+        <div class="section-eyebrow">Расположение</div>
+        <h2 class="map-title">Как нас найти</h2>
+        <ul class="map-details">
+          <li>
+            <div class="map-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <circle cx="12" cy="11" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <div class="map-detail-label">Адрес</div>
+              <div class="map-detail-value">Москва, ул. Примерная, 12</div>
+            </div>
+          </li>
+          <li>
+            <div class="map-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div>
+              <div class="map-detail-label">Режим работы</div>
+              <div class="map-detail-value">Пн–Пт 9:00–18:00</div>
+              <div class="map-detail-value">Сб 10:00–16:00</div>
+            </div>
+          </li>
+          <li>
+            <div class="map-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="map-detail-label">Телефоны</div>
+              <a class="map-detail-value map-detail-link" href="tel:+74951434384">+7 (495) 143-43-84</a>
+              <a class="map-detail-value map-detail-link" href="tel:+79013384384">+7 (901) 338-43-84</a>
+            </div>
+          </li>
+          <li>
+            <div class="map-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="map-detail-label">WhatsApp</div>
+              <a class="map-detail-value map-detail-link" href="https://wa.me/79771053011">+7 (977) 105-30-11</a>
+            </div>
+          </li>
+        </ul>
+        <a href="https://yandex.ru/maps/?text=Москва%2C+ул.+Примерная%2C+12" target="_blank" class="btn-primary map-route-btn">
+          Построить маршрут
+        </a>
+      </div>
+      <div class="map-frame-wrap">
+        <iframe
+          src="https://yandex.ru/map-widget/v1/?ll=37.617635%2C55.755820&z=15&l=map&pt=37.617635%2C55.755820%2Cpm2rdm"
+          allowfullscreen
+          loading="lazy"
+          title="Расположение ЭРА АВТО на карте">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="site-footer">
+
+    <!-- ВЕРХНЯЯ АКЦЕНТ-ПОЛОСА -->
+    <div class="footer-topline">
+      <div class="footer-topline-inner">
+        <div class="footer-topline-text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M5 12l5 5L20 7"/>
+          </svg>
+          Доставка по всей России&nbsp;&nbsp;·&nbsp;&nbsp;Гарантия качества&nbsp;&nbsp;·&nbsp;&nbsp;Сервисное обслуживание
+        </div>
+        <a href="tel:+74951434384" class="footer-topline-phone">+7 (495) 143-43-84</a>
+      </div>
+    </div>
+
+    <!-- ОСНОВНАЯ СЕТКА -->
+    <div class="footer-main">
+      <div class="footer-grid">
+
+        <!-- COL 1 — БРЕНД -->
+        <div class="footer-col footer-brand-col">
+          <a href="{% url 'main-page' %}" class="footer-logo">
+            <span class="footer-logo-name">ERAAUTO</span>
+            <span class="footer-logo-tag">Территория кузовного ремонта</span>
+          </a>
+          <p class="footer-about">
+            Профессиональное оборудование для кузовного ремонта: автостапели BAIWO,
+            подъёмники ЭРА АВТО, споттеры и сопутствующий инструмент.
+            Работаем с 2009 года.
+          </p>
+          <div class="footer-certs">
+            <div class="footer-cert-badge">
+              <span class="footer-cert-icon">EAC</span>
+              <span>Сертифицировано<br>по ТС 010/2011</span>
+            </div>
+            <div class="footer-cert-badge">
+              <span class="footer-cert-icon">15+</span>
+              <span>Лет на<br>рынке</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- COL 2 — КАТАЛОГ -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Каталог</h4>
+          <ul class="footer-links">
+            {% for category in categories %}
+              <li><a href="/catalog/{{ category.slug }}/">{{ category.name }}</a></li>
+            {% empty %}
+              <li><a href="{% url 'catalog-page' %}">Автостапели</a></li>
+              <li><a href="{% url 'catalog-page' %}">Подъёмники</a></li>
+              <li><a href="{% url 'catalog-page' %}">Споттеры</a></li>
+              <li><a href="{% url 'catalog-page' %}">Оснастка и инструмент</a></li>
+              <li><a href="{% url 'catalog-page' %}">Расходные материалы</a></li>
+            {% endfor %}
+            <li class="footer-links-all"><a href="{% url 'catalog-page' %}">Весь каталог →</a></li>
+          </ul>
+        </div>
+
+        <!-- COL 3 — КОМПАНИЯ -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Компания</h4>
+          <ul class="footer-links">
+            <li><a href="{% url 'main-page' %}#about">О компании</a></li>
+            <li><a href="{% url 'gallery-page' %}">Галерея работ</a></li>
+            <li><a href="{% url 'knowledge-page' %}">База знаний</a></li>
+            <li><a href="{% url 'main-page' %}#certs">Сертификаты</a></li>
+            <li><a href="{% url 'main-page' %}#delivery">Доставка и оплата</a></li>
+            <li><a href="{% url 'main-page' %}#delivery">Гарантия</a></li>
+            <li><a href="{% url 'main-page' %}#callback">Контакты</a></li>
+          </ul>
+        </div>
+
+        <!-- COL 4 — КОНТАКТЫ -->
+        <div class="footer-col footer-contacts-col">
+          <h4 class="footer-col-title">Контакты</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <div class="footer-contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/>
+                  <circle cx="12" cy="11" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <div class="footer-contact-label">Адрес</div>
+                <div class="footer-contact-value">Москва, ул. Примерная, 12</div>
+              </div>
+            </li>
+            <li>
+              <div class="footer-contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.12 12.6a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="footer-contact-label">Телефоны</div>
+                <a href="tel:+74951434384" class="footer-contact-value footer-contact-link">+7 (495) 143-43-84</a>
+                <a href="tel:+79013384384" class="footer-contact-value footer-contact-link">+7 (901) 338-43-84</a>
+              </div>
+            </li>
+            <li>
+              <div class="footer-contact-icon footer-contact-icon--wa">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="footer-contact-label">WhatsApp</div>
+                <a href="https://wa.me/79771053011" class="footer-contact-value footer-contact-link">+7 (977) 105-30-11</a>
+              </div>
+            </li>
+            <li>
+              <div class="footer-contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div>
+                <div class="footer-contact-label">Режим работы</div>
+                <div class="footer-contact-value">Пн–Пт: 9:00–18:00</div>
+                <div class="footer-contact-value">Сб: 10:00–16:00</div>
+              </div>
+            </li>
+          </ul>
+
+          <a href="https://wa.me/79771053011" class="footer-wa-btn" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+            </svg>
+            Написать в WhatsApp
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- НИЖНЯЯ ПОЛОСА -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <div class="footer-bottom-copy">
+          © 2009–<span id="footerYear"></span> ЭРА АВТО. Все права защищены.
+        </div>
+        <div class="footer-bottom-legal">
+          <a href="#">Политика конфиденциальности</a>
+          <span class="footer-divider">·</span>
+          <a href="#">Пользовательское соглашение</a>
+        </div>
+        <div class="footer-bottom-made">
+          Профессиональное оборудование для&nbsp;кузовного ремонта
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Корзина
+        <span class="cart-drawer-count" id="drawerCount">0</span>
+      </div>
+      <button class="cart-drawer-close" id="cartDrawerClose" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="cart-drawer-body" id="drawerBody">
+      <div class="cart-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="52" height="52">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <p>Корзина пуста</p>
+        <a href="{% url 'catalog-page' %}" class="cart-empty-link">Перейти в каталог</a>
+      </div>
+    </div>
+    <div class="cart-drawer-footer" id="drawerFooter"></div>
+  </div>
+
+  <script>document.getElementById('footerYear').textContent = new Date().getFullYear();</script>
   <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/cart.js' %}"></script>
 </body>
 </html>

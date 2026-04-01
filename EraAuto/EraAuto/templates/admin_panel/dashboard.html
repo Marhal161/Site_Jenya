@@ -1,0 +1,68 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Дашборд{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">Дашборд</h1>
+</div>
+
+<div class="ap-stats-grid">
+  <a href="{% url 'admin_categories' %}" class="ap-stat-card">
+    <div class="ap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+    <div class="ap-stat-num">{{ categories_count }}</div>
+    <div class="ap-stat-label">Категорий</div>
+  </a>
+  <a href="{% url 'admin_products' %}" class="ap-stat-card">
+    <div class="ap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+    <div class="ap-stat-num">{{ products_count }}</div>
+    <div class="ap-stat-label">Товаров</div>
+  </a>
+  <a href="{% url 'admin_callbacks' %}" class="ap-stat-card {% if new_callbacks %}ap-stat-card--alert{% endif %}">
+    <div class="ap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.12 12.6a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+    <div class="ap-stat-num">{{ callbacks_count }} {% if new_callbacks %}<span class="ap-stat-new">+{{ new_callbacks }} новых</span>{% endif %}</div>
+    <div class="ap-stat-label">Заявок</div>
+  </a>
+  <a href="{% url 'admin_reviews' %}" class="ap-stat-card">
+    <div class="ap-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+    <div class="ap-stat-num">{{ reviews_count }}</div>
+    <div class="ap-stat-label">Отзывов</div>
+  </a>
+</div>
+
+<div class="ap-two-col">
+  <div class="ap-card">
+    <div class="ap-card-header"><h2>Последние заявки</h2><a href="{% url 'admin_callbacks' %}" class="ap-link">Все →</a></div>
+    <table class="ap-table">
+      <thead><tr><th>Имя</th><th>Телефон</th><th>Статус</th><th>Дата</th></tr></thead>
+      <tbody>
+        {% for cb in recent_callbacks %}
+        <tr>
+          <td>{{ cb.name }}</td>
+          <td><a href="tel:{{ cb.phone }}">{{ cb.phone }}</a></td>
+          <td><span class="ap-status ap-status--{{ cb.status }}">{{ cb.get_status_display }}</span></td>
+          <td class="ap-muted">{{ cb.created_at|date:"d.m H:i" }}</td>
+        </tr>
+        {% empty %}<tr><td colspan="4" class="ap-muted">Заявок нет</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ap-card">
+    <div class="ap-card-header"><h2>Последние отзывы</h2><a href="{% url 'admin_reviews' %}" class="ap-link">Все →</a></div>
+    <table class="ap-table">
+      <thead><tr><th>Автор</th><th>Товар</th><th>Оценка</th><th>Дата</th></tr></thead>
+      <tbody>
+        {% for r in recent_reviews %}
+        <tr>
+          <td>{{ r.name }}</td>
+          <td class="ap-muted">{{ r.product.name|truncatechars:30 }}</td>
+          <td>{% for i in "12345" %}{% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}{% endfor %}</td>
+          <td class="ap-muted">{{ r.created_at|date:"d.m H:i" }}</td>
+        </tr>
+        {% empty %}<tr><td colspan="4" class="ap-muted">Отзывов нет</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

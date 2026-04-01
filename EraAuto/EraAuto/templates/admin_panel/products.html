@@ -1,0 +1,44 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Товары{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">Товары</h1>
+  <a href="{% url 'admin_product_create' %}" class="ap-btn ap-btn--primary">+ Добавить</a>
+</div>
+
+<div class="ap-filters">
+  <form method="get" class="ap-filters-form">
+    <input type="text" name="q" value="{{ q }}" placeholder="Поиск по названию...">
+    <select name="cat">
+      <option value="">Все категории</option>
+      {% for c in categories %}<option value="{{ c.id }}" {% if cat == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="ap-btn">Найти</button>
+    {% if q or cat %}<a href="{% url 'admin_products' %}" class="ap-btn">Сбросить</a>{% endif %}
+  </form>
+</div>
+
+<div class="ap-card">
+  <table class="ap-table">
+    <thead><tr><th>#</th><th>Название</th><th>Категория</th><th>Цена</th><th>Наличие</th><th></th></tr></thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td class="ap-muted">{{ p.id }}</td>
+        <td><strong>{{ p.name }}</strong><br><span class="ap-muted">{{ p.slug }}</span></td>
+        <td>{{ p.category.name }}</td>
+        <td>{{ p.price|floatformat:0 }} ₽</td>
+        <td>{% if p.in_stock %}<span class="ap-badge ap-badge--green">В наличии</span>{% else %}<span class="ap-badge ap-badge--gray">Под заказ</span>{% endif %}</td>
+        <td class="ap-actions">
+          <a href="{% url 'admin_product_edit' p.pk %}" class="ap-btn ap-btn--sm">Изменить</a>
+          <form method="post" action="{% url 'admin_product_delete' p.pk %}" onsubmit="return confirm('Удалить товар?')">
+            {% csrf_token %}<button class="ap-btn ap-btn--sm ap-btn--danger">Удалить</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}<tr><td colspan="6" class="ap-muted">Товаров нет</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

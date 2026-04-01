@@ -1,0 +1,100 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}{{ action }} документ{% endblock %}
+{% block content %}
+<div class="ap-page-header">
+  <h1 class="ap-page-title">{{ action }} документ</h1>
+  <a href="{% url 'admin_docs' %}" class="ap-btn">← Назад</a>
+</div>
+
+<div class="ap-card ap-card--form">
+  {% if error %}
+  <div class="ap-alert ap-alert--error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="ap-field">
+      <label>Товар *</label>
+      <select name="product" required>
+        <option value="">— Выберите товар —</option>
+        {% for p in products %}
+        <option value="{{ p.pk }}" {% if obj and obj.product_id == p.pk %}selected{% endif %}>
+          [{{ p.category.name }}] {{ p.name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="ap-field">
+      <label>Название документа *</label>
+      <input type="text" name="title" value="{% if obj %}{{ obj.title }}{% endif %}"
+             placeholder="Инструкция по эксплуатации BAIWO 308" required>
+    </div>
+
+    <div class="ap-field">
+      <label>Тип документа</label>
+      <select name="doc_type">
+        {% for val, label in doc_types %}
+        <option value="{{ val }}" {% if obj and obj.doc_type == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% if obj %}
+    <div class="ap-field">
+      <label>Текущий файл</label>
+      <a href="{{ obj.file.url }}" target="_blank" class="ap-current-file">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        {{ obj.filename }}
+      </a>
+    </div>
+    <div class="ap-field">
+      <label>Заменить файл</label>
+      <input type="file" name="file" class="ap-file-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
+      <span class="ap-hint">Оставьте пустым, чтобы сохранить текущий файл</span>
+    </div>
+    {% else %}
+    <div class="ap-field">
+      <label>Файл *</label>
+      <input type="file" name="file" class="ap-file-input"
+             accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" required>
+      <span class="ap-hint">Поддерживаются: PDF, DOCX, XLS, XLSX, JPG, PNG</span>
+    </div>
+    {% endif %}
+
+    <div class="ap-field">
+      <label>Порядок сортировки</label>
+      <input type="number" name="order" value="{% if obj %}{{ obj.order }}{% else %}0{% endif %}"
+             min="0" style="max-width:120px;">
+      <span class="ap-hint">Чем меньше число, тем выше в списке</span>
+    </div>
+
+    <div class="ap-form-actions">
+      <button type="submit" class="ap-btn ap-btn--primary">Сохранить</button>
+      <a href="{% url 'admin_docs' %}" class="ap-btn">Отмена</a>
+    </div>
+  </form>
+</div>
+
+<style>
+.ap-alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
+.ap-alert--error { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+.ap-current-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1d4ed8;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  background: #eff6ff;
+  border-radius: 6px;
+  border: 1px solid #bfdbfe;
+}
+.ap-current-file:hover { background: #dbeafe; }
+</style>
+{% endblock %}

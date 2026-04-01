@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — EraAuto Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/admin/admin.css' %}">
+</head>
+<body class="ap-login-body">
+  <div class="ap-login-wrap">
+    <div class="ap-login-logo">
+      <span class="ap-logo-name">ERAAUTO</span>
+      <span class="ap-logo-sub">Административная панель</span>
+    </div>
+    <form method="post" class="ap-login-form">
+      {% csrf_token %}
+      {% if error %}
+        <div class="ap-alert ap-alert--error">{{ error }}</div>
+      {% endif %}
+      <div class="ap-field">
+        <label>Логин</label>
+        <input type="text" name="username" autofocus autocomplete="username" placeholder="admin">
+      </div>
+      <div class="ap-field">
+        <label>Пароль</label>
+        <input type="password" name="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <button type="submit" class="ap-btn ap-btn--primary ap-btn--full">Войти</button>
+    </form>
+  </div>
+</body>
+</html>
