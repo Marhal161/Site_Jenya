@@ -15,10 +15,10 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -144,3 +144,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'EraAuto/static/images'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# === Email (Mail.ru SMTP) ===
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')          # info@yourcompany.ru
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # пароль для внешних приложений
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+CALLBACK_RECIPIENT = os.getenv('CALLBACK_RECIPIENT', os.getenv('EMAIL_HOST_USER'))
+EMAIL_TIMEOUT = 10  # сек, чтобы зависший SMTP не подвешивал API-запрос

@@ -141,51 +141,56 @@
 
     // Отправка формы
     document.getElementById('cpOrderForm')?.addEventListener('submit', async e => {
-      e.preventDefault();
+    e.preventDefault();
 
-      const name    = document.getElementById('cpName').value.trim();
-      const phone   = document.getElementById('cpPhone').value.trim();
-      const comment = document.getElementById('cpComment').value.trim();
-      const errEl   = document.getElementById('cpError');
-      const btn     = document.getElementById('cpSubmit');
-      const items   = getItems();
-      const total   = items.reduce((s, i) => s + i.price * i.quantity, 0);
+    const name    = document.getElementById('cpName').value.trim();
+    const phone   = document.getElementById('cpPhone').value.trim();
+    const comment = document.getElementById('cpComment').value.trim();
+    const errEl   = document.getElementById('cpError');
+    const btn     = document.getElementById('cpSubmit');
+    const items   = getItems();
+    const total   = items.reduce((s, i) => s + i.price * i.quantity, 0);
 
-      errEl.textContent = '';
-      if (!name)             { errEl.textContent = 'Введите имя'; return; }
-      if (phone.length < 16) { errEl.textContent = 'Введите корректный телефон'; return; }
+    errEl.textContent = '';
+    if (!name)             { errEl.textContent = 'Введите имя'; return; }
+    if (phone.length < 16) { errEl.textContent = 'Введите корректный телефон'; return; }
+    if (!items.length)     { errEl.textContent = 'Корзина пуста'; return; }
 
-      btn.disabled    = true;
-      btn.textContent = 'Отправка...';
+    btn.disabled    = true;
+    btn.textContent = 'Отправка...';
 
-      const cartText = items.length
-        ? items.map(i => `• ${i.name} × ${i.quantity} = ${fmt(i.price * i.quantity)} ₽`).join('\n')
-          + `\n\nИтого: ${fmt(total)} ₽`
-        : 'Корзина пуста';
+    // Список товаров — отдельно от комментария
+    const cartText = items.map(i =>
+      `• ${i.name} × ${i.quantity} = ${fmt(i.price * i.quantity)} ₽`
+    ).join('\n') + `\n\nИтого: ${fmt(total)} ₽`;
 
-      const message = cartText + (comment ? `\n\nКомментарий: ${comment}` : '');
-
-      try {
-        const res = await fetch('/api/callback/', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf() },
-          body:    JSON.stringify({ name, phone, message }),
-        });
+    try {
+      const res = await fetch('/api/callback/', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf() },
+        body:    JSON.stringify({
+          name,
+          phone,
+          message: cartText,    // только товары
+          comment,              // отдельное поле
+          source:  'cart',      // метка источника
+        }),
+      });
 
         if (res.ok || res.status === 201) {
           saveItems([]);
           document.getElementById('cpOrderForm').style.display = 'none';
           document.getElementById('cpSuccess').style.display   = 'flex';
         } else {
-          errEl.textContent = 'Ошибка отправки. Попробуйте снова.';
-          btn.disabled = false;
-          btn.textContent = 'Отправить заявку';
+        errEl.textContent = 'Ошибка отправки. Попробуйте снова.';
+        btn.disabled = false;
+        btn.textContent = 'Отправить заявку';
         }
-      } catch {
+    } catch {
         errEl.textContent = 'Ошибка сети. Попробуйте позже.';
         btn.disabled = false;
         btn.textContent = 'Отправить заявку';
-      }
+        }
     });
 
     // Навдропдаун + футер каталог

@@ -123,11 +123,11 @@ window.addEventListener('scroll', () => {
     btn.textContent = 'Отправка...';
 
     try {
-      const res = await fetch('/api/callback/', {
+    const res = await fetch('/api/callback/', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() },
-        body:    JSON.stringify({ name, phone, message }),
-      });
+        body:    JSON.stringify({ name, phone, message, source: 'callback' }),
+    });
 
       if (res.ok || res.status === 201) {
         form.style.display = 'none';
